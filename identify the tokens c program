@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <ctype.h>
+
+#define MAX_ID_LEN 20
+
+int main() {
+    char ch, identifier[MAX_ID_LEN + 1];
+    int idx = 0;
+    FILE *file = fopen("input.c", "r");
+
+    if (!file) {
+        printf("Error opening file!\n");
+        return 1;
+    }
+
+    while ((ch = fgetc(file)) != EOF) {
+        if (ch == ' ' || ch == '\t' || ch == '\n') {
+            continue;
+        }
+
+        if (isalpha(ch)) {
+            idx = 0;
+            identifier[idx++] = ch;
+            while (isalnum(ch = fgetc(file)) && idx < MAX_ID_LEN) {
+                identifier[idx++] = ch;
+            }
+            identifier[idx] = '\0';
+            printf("Identifier: %s\n", identifier);
+            if (isalnum(ch)) {
+                while (isalnum(ch = fgetc(file)));
+            }
+            ungetc(ch, file);
+        } 
+        else if (isdigit(ch)) {
+            printf("Constant: ");
+            do {
+                printf("%c", ch);
+                ch = fgetc(file);
+            } while (isdigit(ch));
+            printf("\n");
+            ungetc(ch, file);
+        } 
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=' || ch == '<' || ch == '>') {
+            printf("Operator: %c\n", ch);
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
