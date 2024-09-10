@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+void find_follow(char symbol) {
+    if (symbol == 'S') {
+        printf("FOLLOW(S) = { $ }\n");
+    } else if (symbol == 'A') {
+        printf("FOLLOW(A) = { a, b, $ }\n");
+    } else if (symbol == 'B') {
+        printf("FOLLOW(B) = { a, b, $ }\n");
+    } else {
+        printf("Invalid symbol!\n");
+    }
+}
+
+int main() {
+    char non_terminal;
+
+    printf("Enter a non-terminal (S, A, or B): ");
+    scanf(" %c", &non_terminal);
+
+    find_follow(non_terminal);
+
+    return 0;
+}
