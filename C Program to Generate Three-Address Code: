@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int temp_count = 0;
+
+void generate_TAC(char* expr) {
+    char temp_var[3];
+    char op_stack[100], postfix[100];
+    int op_top = -1, post_top = -1;
+
+    // Helper function to pop and generate TAC
+    void pop_and_generate() {
+        char t1[3], t2[3], temp[3];
+        temp_count++;
+        sprintf(temp, "t%d", temp_count);
+        t1[0] = postfix[post_top--]; t1[1] = '\0';
+        t2[0] = postfix[post_top--]; t2[1] = '\0';
+        printf("%s = %s %c %s\n", temp, t2, op_stack[op_top--], t1);
+        postfix[++post_top] = temp[0]; // push temp result back to postfix
+    }
+
+    // Iterate over the input expression
+    for (int i = 0; i < strlen(expr); i++) {
+        if (isalnum(expr[i])) {
+            postfix[++post_top] = expr[i]; // if operand, add to postfix
+        } else if (expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '/') {
+            while (op_top != -1 && (op_stack[op_top] == '*' || op_stack[op_top] == '/')) {
+                pop_and_generate(); // pop higher precedence operators and generate TAC
+            }
+            op_stack[++op_top] = expr[i]; // push current operator
+        }
+    }
+
+    // Generate TAC for remaining operators
+    while (op_top != -1) {
+        pop_and_generate();
+    }
+
+    // Final assignment
+    printf("%c = t%d\n", expr[0], temp_count);
+}
+
+int main() {
+    char input_expr[100];
+    printf("Enter the input expression (e.g., a=b+c*d): ");
+    scanf("%s", input_expr);
+
+    printf("\nGenerated Three-Address Code:\n");
+    generate_TAC(input_expr);
+
+    return 0;
+}
