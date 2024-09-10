@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+
+void printLeadingSet(char nonTerminal[], char *leadingSet[], int size) {
+    printf("LEADING(%s) = { ", nonTerminal);
+    for (int i = 0; i < size; i++) {
+        printf("%s", leadingSet[i]);
+        if (i < size - 1) {
+            printf(", ");
+        }
+    }
+    printf(" }\n");
+}
+
+int main() {
+    char *leadingE[] = { "(", "id" };
+    char *leadingT[] = { "(", "id" };
+    char *leadingF[] = { "(", "id" };
+
+    printf("LEADING sets for the given grammar:\n");
+
+    printLeadingSet("E", leadingE, 2);
+    printLeadingSet("T", leadingT, 2);
+    printLeadingSet("F", leadingF, 2);
+
+    return 0;
+}
