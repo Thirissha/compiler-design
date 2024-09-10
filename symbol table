@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+struct SymbolTableEntry {
+    char name[50];
+    char type[20];
+};
+
+struct SymbolTableEntry symbolTable[MAX];
+int count = 0;
+
+void insert(char name[], char type[]) {
+    // Check if symbol already exists
+    for (int i = 0; i < count; i++) {
+        if (strcmp(symbolTable[i].name, name) == 0) {
+            printf("Symbol '%s' already exists in the symbol table.\n", name);
+            return;
+        }
+    }
+
+    // Insert new symbol
+    strcpy(symbolTable[count].name, name);
+    strcpy(symbolTable[count].type, type);
+    count++;
+    printf("Symbol '%s' of type '%s' inserted successfully.\n", name, type);
+}
+
+void search(char name[]) {
+    for (int i = 0; i < count; i++) {
+        if (strcmp(symbolTable[i].name, name) == 0) {
+            printf("Symbol found: Name = %s, Type = %s\n", symbolTable[i].name, symbolTable[i].type);
+            return;
+        }
+    }
+    printf("Symbol '%s' not found in the symbol table.\n", name);
+}
+
+void display() {
+    if (count == 0) {
+        printf("Symbol table is empty.\n");
+        return;
+    }
+
+    printf("\nSymbol Table:\n");
+    printf("Name\tType\n");
+    printf("----------------------\n");
+    for (int i = 0; i < count; i++) {
+        printf("%s\t%s\n", symbolTable[i].name, symbolTable[i].type);
+    }
+}
+
+int main() {
+    int choice;
+    char name[50], type[20];
+
+    do {
+        printf("\nSymbol Table Operations:\n");
+        printf("1. Insert\n");
+        printf("2. Search\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter symbol name: ");
+                scanf("%s", name);
+                printf("Enter symbol type: ");
+                scanf("%s", type);
+                insert(name, type);
+                break;
+
+            case 2:
+                printf("Enter symbol name to search: ");
+                scanf("%s", name);
+                search(name);
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Exiting program.\n");
+                break;
+
+            default:
+                printf("Invalid choice! Please enter a valid option.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
